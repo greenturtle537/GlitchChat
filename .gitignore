@@ -4,3 +4,5 @@ rooms.json
 users.json
 rooms/*
 nohup.out
+poetry.lock
+pyproject.toml
