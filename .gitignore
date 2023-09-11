@@ -1,0 +1,6 @@
+.replit
+replit.nix
+rooms.json
+users.json
+rooms/*
+nohup.out
