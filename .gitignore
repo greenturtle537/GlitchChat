@@ -6,3 +6,4 @@ rooms/*
 nohup.out
 poetry.lock
 pyproject.toml
+.pythonlibs

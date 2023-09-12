@@ -45,7 +45,7 @@ def center_text(text, y, pad="", attr=curses.A_NORMAL):
 def datetime_from_utc_to_local(utc_datetime):  # Borrowed function
   now_timestamp = time.time()
   offset = datetime.fromtimestamp(now_timestamp) - datetime.utcfromtimestamp(
-    now_timestamp)
+      now_timestamp)
   return utc_datetime + offset
 
 
@@ -85,8 +85,8 @@ def write(author, timestamp, messages):
   for message in messages:
     #buffer.append(str(message)[:curses.COLS - 1:])
     buffer.append(
-      "[%s]<%s> %s" %
-      (timestamp, author, str(message)))  #Force sanitize all output
+        "[%s]<%s> %s" %
+        (timestamp, author, str(message)))  #Force sanitize all output
   refresh(yoff)
 
 
@@ -108,10 +108,9 @@ def refresh(y=0):
 
 def trycommand(commandtext):
   if commandtext in list(functionmap):
-    #functionmap[commandtext]()
     return True
   else:
-    return False
+    return False  #Not sure how to disable replit catch
 
 
 def docommand(commandtext, *args):
@@ -120,8 +119,9 @@ def docommand(commandtext, *args):
 
 def help(*args):
   helplist = [
-    "/help ~ Display this text", "/connect <username> ~ Connect to the server",
-    "/join <room> ~ Join a room", "/users ~ Display online users"
+      "/help ~ Display this text",
+      "/connect <username> ~ Connect to the server",
+      "/join <room> ~ Join a room", "/users ~ Display online users"
   ]
   return helplist
 
@@ -140,8 +140,8 @@ def connect(*args):
     return "Connected as %s" % localusername
   else:
     return [
-      "This username is already in use",
-      "Please wait a few seconds before trying again"
+        "This username is already in use",
+        "Please wait a few seconds before trying again"
     ]
 
 
@@ -151,8 +151,8 @@ def join(*args):
   room = args[0][0]
   r = requests.get("http://glitchtech.top:8/join",
                    params={
-                     "username": en(localusername),
-                     "room": en(room)
+                       "username": en(localusername),
+                       "room": en(room)
                    })
   result = r.json()
   if result["result"] == 1:
@@ -167,8 +167,8 @@ def message(msg):
   #cl_write(en(msg))
   r = requests.get("http://glitchtech.top:8/message",
                    params={
-                     "username": en(localusername),
-                     "message": en(msg)
+                       "username": en(localusername),
+                       "message": en(msg)
                    })
   result = r.json()
   if result["result"] == 1:
@@ -182,8 +182,8 @@ def users(*args):
   res = r.json()
   usercount = len(res)
   userlist = [
-    "There are %s users online" % usercount,
-    "Username        Last Updated        Activity"
+      "There are %s users online" % usercount,
+      "Username        Last Updated        Activity"
   ]
   for user in list(res):
     if isinstance(res[user]["activity"], numbers.Number):
