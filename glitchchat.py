@@ -151,7 +151,7 @@ class ChessServer(BaseHTTPRequestHandler):
       room = query_components["room"]
       roomsjson = jload("rooms.json")
       res = {"result": 0}
-      if not room in roomsjson.keys():
+      if room not in roomsjson.keys():
         roomsjson[room] = {
           "lifetime": False,
           "filter": False,
@@ -159,7 +159,7 @@ class ChessServer(BaseHTTPRequestHandler):
           "owner": False,
           "editable": True,
           "motd": "This is a room",
-          "refresh": True
+          "refresh": True,
           "refreshlen": 10
         }
         jwrite("rooms.json", roomsjson)
