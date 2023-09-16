@@ -73,9 +73,9 @@ def string2time(string):
 
 def chat(author, message):
   obj = {
-    "timestamp": time2string(get_time()),
-    "author": author,
-    "message": message
+      "timestamp": time2string(get_time()),
+      "author": author,
+      "message": message
   }
   return obj
 
@@ -139,8 +139,8 @@ class ChessServer(BaseHTTPRequestHandler):
       # Interpret strings as chat room signatures
       if not username in userjson.keys():
         userjson[username] = {
-          "keepalive": time2string(get_time()),
-          "activity": 0
+            "keepalive": time2string(get_time()),
+            "activity": 0
         }
         jwrite("users.json", userjson)
         res["result"] = 1
@@ -153,14 +153,14 @@ class ChessServer(BaseHTTPRequestHandler):
       res = {"result": 0}
       if room not in roomsjson.keys():
         roomsjson[room] = {
-          "lifetime": False,
-          "filter": False,
-          "length": 50,
-          "owner": False,
-          "editable": True,
-          "motd": "This is a room",
-          "refresh": True,
-          "refreshlen": 10
+            "lifetime": False,
+            "filter": False,
+            "length": 50,
+            "owner": False,
+            "editable": True,
+            "motd": "This is a room",
+            "refresh": True,
+            "refreshlen": 10
         }
         jwrite("rooms.json", roomsjson)
         list = []
@@ -174,7 +174,7 @@ class ChessServer(BaseHTTPRequestHandler):
 
     if p == "/time":
       self.wfile.write(
-        bytes(json.dumps({"result": time2string(get_time())}), "utf-8"))
+          bytes(json.dumps({"result": time2string(get_time())}), "utf-8"))
 
     if p == "/rooms":
       self.wfile.write(bytes(json.dumps(jload("rooms.json")), "utf-8"))
@@ -232,7 +232,7 @@ class ChessServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes(json.dumps(newmsgs), "utf-8"))
       else:
         self.wfile.write(
-          bytes(json.dumps({"result": "Not logged in"}), "utf-8"))
+            bytes(json.dumps({"result": "Not logged in"}), "utf-8"))
 
   def do_POST(self):
     content_length = int(self.headers['Content-Length'])

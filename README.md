@@ -1,6 +1,20 @@
-# GlitchChat
+# Glitch Chat
 *Brought to you by Glitch Technologies.*
 A http-driven communication protocol that uses a central server to relay new messages between connected users.
+
+# Usage
+**You can try out Glitch Chat with replit.com right now, in your browser. Just go to
+https://replit.com/@greenturtle537/GlitchChat?v=1
+and hit the play button**
+
+To use GlitchChat on you machine, you will need python and the pip installer. You will also need to install the requests package.
+
+pip import requests
+python client/main.py
+
+Once the client is running, you can type /help to get more information.
+
+
 
 # Server
 The majority of the code in this repository is designed to run the backend of GlitchChat. 
