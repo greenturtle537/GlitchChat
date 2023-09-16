@@ -127,17 +127,18 @@ class ChessServer(BaseHTTPRequestHandler):
     self.end_headers()
 
     if p == "/connect":
-      # Result 0: Username already in use
+      # Result 0: Username already-in-use/reserved
       # Result 1: Connected
 
       #username = de(query_components["username"])
       username = de(query_components["username"])
       userjson = jload("users.json")
+      reserved = ["LOCAL", "CLIENT"]
       res = {"result": 0}
       # Number activities are hardcoded as follows
       # 0 = Logged in
       # Interpret strings as chat room signatures
-      if not username in userjson.keys():
+      if not username in userjson.keys() or not username in reserved:
         userjson[username] = {
             "keepalive": time2string(get_time()),
             "activity": 0
