@@ -1,10 +1,12 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import json
 import base64
-from urllib.parse import urlparse
-from datetime import datetime
-from timer import RepeatedTimer
+import contextlib
+import json
 import numbers
+from datetime import datetime
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse
+
+import timer
 
 timestd = "%m:%d:%y:%H:%M:%S:%f"
 
@@ -13,10 +15,7 @@ serverPort = 8
 
 
 def in_index(mylist, target):
-  for i in mylist:
-    if i == target:
-      return True
-  return False
+  return any(i == target for i in mylist)
 
 
 def base64_decode(string):
@@ -138,7 +137,7 @@ class ChessServer(BaseHTTPRequestHandler):
       # Number activities are hardcoded as follows
       # 0 = Logged in
       # Interpret strings as chat room signatures
-      if not username in userjson.keys() or not username in reserved:
+      if username not in userjson.keys() or username not in reserved:
         userjson[username] = {
             "keepalive": time2string(get_time()),
             "activity": 0
@@ -207,7 +206,6 @@ class ChessServer(BaseHTTPRequestHandler):
       if username in userjson and room in roomsjson:
         userjson[username]["activity"] = room
         jwrite("users.json", userjson)
-        #self.wfile.write(bytes(json.dumps(userjson), "utf-8")) Cannot remember if this was for debugging
         if roomsjson[room]["refresh"]:
           activeroom = jload("rooms/%s.json" % room)
           self.wfile.write(bytes(json.dumps(activeroom), "utf-8"))
@@ -242,9 +240,8 @@ class ChessServer(BaseHTTPRequestHandler):
     decode = []
     if in_index(decode, self.path):
       query = post_data.decode("utf-8")
-      query_components = {}
       if len(query) > 0:
-        query_components = get_query(query)
+        get_query(query)
     self.send_response(200)
     self.send_header("Content-type", "text/json")
     self.end_headers()
@@ -254,14 +251,14 @@ class ChessServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
   webServer = HTTPServer((hostName, serverPort), ChessServer)
-  rt = RepeatedTimer(1, cleaner)  # it no auto-starts, yes need of rt.start()
+  rt = timer.RepeatedTimer(
+      1, cleaner)  # it no auto-starts, yes need of rt.start()
   rt.start()
   try:
     print("Server started http://%s:%s" % (hostName, serverPort))
-    try:
+    with contextlib.suppress(KeyboardInterrupt):
       webServer.serve_forever()
-    except KeyboardInterrupt:
-      pass
+
   finally:
     rt.stop()
 
