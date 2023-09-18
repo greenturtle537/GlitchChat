@@ -98,7 +98,7 @@ def cleaner():
       timeout = dif.total_seconds()
       if timeout >= 5:
         rooms.pop(room)
-  log = log(loglist)
+  loglist = log(loglist)
 
 def log(list):
   if len(list) > 20:
