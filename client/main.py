@@ -1,21 +1,22 @@
-import requests
-import os
-import time
+import base64
 import curses
 import curses.textpad
-from datetime import datetime
 import numbers
-import base64
+import os
+import time
+from datetime import datetime
+
+import requests
 
 
 #curses routines
-def start_curses(instance):
+def start_curses():
   curses.noecho()
   curses.cbreak()
   stdscr.keypad(True)
 
 
-def stop_curses(instance):
+def stop_curses():
   curses.nocbreak()
   stdscr.keypad(False)
   curses.echo()
@@ -155,12 +156,14 @@ def join(*args):
                        "room": en(room)
                    })
   result = r.json()
-  if result["result"] == 1:
+  #cl_write(result["result"])
+
+  if result["result"] != 0:
     global localroom
     localroom = room
     return "Connected to %s" % room
-  elif result["result"] == 0:
-    return "User/Room not found"
+  elif str(result["result"]) == 0:
+      return "User/Room not found"
 
 
 def message(msg):
@@ -216,7 +219,7 @@ win = curses.newwin(1, curses.COLS - 10, curses.LINES - 2, 4)
 count = 2
 stdscr.nodelay(True)
 
-start_curses(stdscr)
+start_curses()
 buffer = []
 timestd = "%m:%d:%y:%H:%M:%S:%f"
 localusername = "local"
@@ -283,5 +286,5 @@ while True:
   # ----- Single routine handlers -----
 
   stdscr.refresh()
-stop_curses(stdscr)
+stop_curses()
 print("~GlitchChat Client Terminated~")

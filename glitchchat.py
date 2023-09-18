@@ -80,9 +80,10 @@ def chat(author, message):
 
 
 def cleaner():
+  loglist = []
   users = jload("users.json")
   rooms = jload("rooms.json")
-  print(users)
+  loglist.append(str(users))
   for user in list(users):
     alive = users[user]["keepalive"]
     dif = get_time() - string2time(alive)
@@ -90,13 +91,23 @@ def cleaner():
     if timeout >= 5:
       users.pop(user)
       jwrite("users.json", users)
-  print(rooms)
+  loglist.append(str(rooms))
   for room in list(rooms):
     if rooms[room]["lifetime"]:
       dif = get_time() - string2time(rooms[room]["lifetime"])
       timeout = dif.total_seconds()
       if timeout >= 5:
         rooms.pop(room)
+  log = log(loglist)
+
+def log(list):
+  if len(list) > 20:
+    list = list[len(list)-20:len(list)-1:]
+  with open('log.out', 'w') as logfile:
+    for item in list:
+      logfile.write("%s\n" % item)
+  logfile.close()
+  return list 
 
 
 def login(username, password):
@@ -208,7 +219,10 @@ class ChessServer(BaseHTTPRequestHandler):
         jwrite("users.json", userjson)
         if roomsjson[room]["refresh"]:
           activeroom = jload("rooms/%s.json" % room)
-          self.wfile.write(bytes(json.dumps(activeroom), "utf-8"))
+          #self.wfile.write(bytes(json.dumps(activeroom), "utf-8"))
+          #Should return roomfile for processing, but client does not support it yet
+          self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
+
         else:
           self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
       else:
