@@ -13,6 +13,8 @@ timestd = "%m:%d:%y:%H:%M:%S:%f"
 hostName = "glitchtech.top"
 serverPort = 8
 
+loglist = []
+
 
 def in_index(mylist, target):
   return any(i == target for i in mylist)
@@ -80,7 +82,7 @@ def chat(author, message):
 
 
 def cleaner():
-  loglist = []
+  global loglist
   users = jload("users.json")
   rooms = jload("rooms.json")
   loglist.append(str(users))
