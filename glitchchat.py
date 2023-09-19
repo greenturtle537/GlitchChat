@@ -103,6 +103,7 @@ def cleaner():
   loglist = log(loglist)
 
 def log(list):
+  print(list)
   if len(list) > 20:
     list = list[len(list)-20:len(list)-1:]
   with open('log.out', 'w') as logfile:
