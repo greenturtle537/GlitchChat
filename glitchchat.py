@@ -13,8 +13,6 @@ timestd = "%m:%d:%y:%H:%M:%S:%f"
 hostName = "glitchtech.top"
 serverPort = 8
 
-loglist = []
-
 
 def in_index(mylist, target):
   return any(i == target for i in mylist)
@@ -82,10 +80,8 @@ def chat(author, message):
 
 
 def cleaner():
-  global loglist
   users = jload("users.json")
   rooms = jload("rooms.json")
-  loglist.append(str(users))
   for user in list(users):
     alive = users[user]["keepalive"]
     dif = get_time() - string2time(alive)
@@ -93,24 +89,21 @@ def cleaner():
     if timeout >= 5:
       users.pop(user)
       jwrite("users.json", users)
-  loglist.append(str(rooms))
   for room in list(rooms):
     if rooms[room]["lifetime"]:
       dif = get_time() - string2time(rooms[room]["lifetime"])
       timeout = dif.total_seconds()
       if timeout >= 5:
         rooms.pop(room)
-  loglist = log(loglist)
+  log(users, rooms)
 
-def log(list):
-  print(list)
-  if len(list) > 20:
-    list = list[len(list)-20:len(list)-1:]
+
+def log(*args):
+  print(args)
   with open('log.out', 'w') as logfile:
-    for item in list:
+    for item in args:
       logfile.write("%s\n" % item)
   logfile.close()
-  return list 
 
 
 def login(username, password):
