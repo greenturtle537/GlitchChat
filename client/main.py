@@ -217,7 +217,7 @@ def rooms(*args):
         presentusers += 1
     #time = clean_time(res[room]["lifetime"])
     #Properly store lifetimes serverside first
-    time = clean_time(time2string(get_time))
+    time = clean_time(time2string(get_time()))
     roomlist.append("%s%s%s" % (room.ljust(16), time.ljust(20), presentusers))
   return roomlist
 
