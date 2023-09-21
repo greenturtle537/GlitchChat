@@ -122,7 +122,8 @@ def help(*args):
   helplist = [
       "/help ~ Display this text",
       "/connect <username> ~ Connect to the server",
-      "/join <room> ~ Join a room", "/users ~ Display online users"
+      "/join <room> ~ Join a room", "/users ~ Display online users",
+      "/rooms ~ Display info about rooms"
   ]
   return helplist
 
@@ -163,7 +164,7 @@ def join(*args):
     localroom = room
     return "Connected to %s" % room
   elif str(result["result"]) == 0:
-      return "User/Room not found"
+    return "User/Room not found"
 
 
 def message(msg):
@@ -198,6 +199,29 @@ def users(*args):
   return userlist
 
 
+def rooms(*args):
+  r = requests.get("http://glitchtech.top:8/rooms")
+  res = r.json()
+  roomcount = len(res)
+  r = requests.get("http://glitchtech.top:8/users")
+  userlist = r.json()
+  roomlist = [
+      "There are %s rooms open" % roomcount,
+      "Room        Last Updated        Users"
+  ]
+  for room in list(res):
+    presentusers = 0
+    for user in list(userlist):
+      numbercheck = isinstance(userlist[user]["activity"], numbers.Number)
+      if not numbercheck and userlist[user]["activity"] == room:
+        presentusers += 1
+    #time = clean_time(res[room]["lifetime"])
+    #Properly store lifetimes serverside first
+    time = clean_time(time2string(get_time))
+    roomlist.append("%s%s%s" % (room.ljust(16), time.ljust(20), presentusers))
+  return roomlist
+
+
 def keepalive(userid):
   r = requests.get("http://glitchtech.top:8/keepalive",
                    params={"username": en(userid)})
@@ -209,7 +233,13 @@ def keepalive(userid):
 
 
 #Keep at bottom
-functionmap = {"connect": connect, "help": help, "join": join, "users": users}
+functionmap = {
+    "connect": connect,
+    "help": help,
+    "join": join,
+    "users": users,
+    "rooms": rooms
+}
 
 #Code entry
 
