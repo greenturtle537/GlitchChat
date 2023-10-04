@@ -104,6 +104,7 @@ def refresh(y=0):
     else:
       stdscr.addstr(i + 3, 0, "".ljust(curses.COLS))
   stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
+  center_text("", curses.LINES - 3, "▓")
   stdscr.refresh()
 
 
