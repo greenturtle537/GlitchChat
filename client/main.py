@@ -235,6 +235,8 @@ def keepalive(userid):
 
 #Keep at bottom
 functionmap = {
+    "c": connect,
+    "j": connect,
     "connect": connect,
     "help": help,
     "join": join,
