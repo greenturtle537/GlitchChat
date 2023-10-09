@@ -9,9 +9,9 @@ and hit the play button**
 
 To use GlitchChat on you machine, you will need python and the pip installer. You will also need to install the requests package.
 
-pip import requests
+```pip import requests
 python client/main.py
-
+```
 Once the client is running, you can type /help to get more information.
 
 
