@@ -121,10 +121,10 @@ def docommand(commandtext, *args):
 
 def help(*args):
   helplist = [
-      "/help ~ Display this text (/h)",
-      "/connect <username> ~ Connect to the server (c)",
-      "/join <room> ~ Join a room", "/users ~ Display online users (/j)",
-      "/rooms ~ Display info about rooms (/r)"
+      "/h, /help ~ Display this text (/h)",
+      "/c, /connect <username> ~ Connect to the server (c)",
+      "/j, /join <room> ~ Join a room", "/users ~ Display online users (/j)",
+      "/r, /rooms ~ Display info about rooms (/r)"
   ]
   return helplist
 
