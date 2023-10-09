@@ -121,10 +121,10 @@ def docommand(commandtext, *args):
 
 def help(*args):
   helplist = [
-      "/help ~ Display this text",
-      "/connect <username> ~ Connect to the server",
-      "/join <room> ~ Join a room", "/users ~ Display online users",
-      "/rooms ~ Display info about rooms"
+      "/h, /help ~ Display this text (/h)",
+      "/c, /connect <username> ~ Connect to the server (c)",
+      "/j, /join <room> ~ Join a room", "/users ~ Display online users (/j)",
+      "/r, /rooms ~ Display info about rooms (/r)"
   ]
   return helplist
 
@@ -235,6 +235,11 @@ def keepalive(userid):
 
 #Keep at bottom
 functionmap = {
+    "c": connect,
+    "j": join,
+    "h": help,
+    "u": users,
+    "r": rooms,
     "connect": connect,
     "help": help,
     "join": join,
@@ -260,7 +265,7 @@ activitychart = {0: "Logged in"}
 yoff = 0
 
 center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
-center_text("| GlitchChat v0.2 |", 1, "▓", curses.A_STANDOUT)
+center_text("[ GlitchChat v0.2 ]", 1, "▓", curses.A_STANDOUT)
 center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
 
 center_text("", curses.LINES - 3, "▓")
