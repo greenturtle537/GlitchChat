@@ -157,8 +157,8 @@ class ChessServer(BaseHTTPRequestHandler):
     if p == "/makeroom":
       room = de(query_components["room"])
       motd = "This is a room"
-      if "motd" in query_components.keys():
-        motd = de(query_component["motd"])
+      if "motd" in query_components:
+        motd = de(query_components["motd"])
       roomsjson = jload("rooms.json")
       res = {"result": 0}
       if room not in roomsjson.keys():
