@@ -4,7 +4,9 @@
 - Modify room settings
 - Migrate project
 - Account creation
-- Add bio to rooms
+- Add bio to rooms [Needs client implementation]
 - Add user joined message
 - Replit part-screen doesn't render correctly
 - Character limit in input line
+- Makeroom name parity
+- Restrict room creation
