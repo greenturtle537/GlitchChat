@@ -155,7 +155,10 @@ class ChessServer(BaseHTTPRequestHandler):
       self.wfile.write(bytes(json.dumps(res), "utf-8"))
 
     if p == "/makeroom":
-      room = query_components["room"]
+      room = de(query_components["room"])
+      motd = "This is a room"
+      if "motd" in query_components.keys():
+        motd = de(query_component["motd"])
       roomsjson = jload("rooms.json")
       res = {"result": 0}
       if room not in roomsjson.keys():
@@ -165,7 +168,7 @@ class ChessServer(BaseHTTPRequestHandler):
             "length": 50,
             "owner": False,
             "editable": True,
-            "motd": "This is a room",
+            "motd": motd,
             "refresh": True,
             "refreshlen": 10
         }
