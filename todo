@@ -1,12 +1,11 @@
-- Add room creation
++ Add room creation
 - More room settings
 - Room ownership
 - Modify room settings
-- Migrate project
 - Account creation
-- Add bio to rooms [Needs client implementation]
++ Add bio to rooms [Needs client implementation]
 - Add user joined message
-- Replit part-screen doesn't render correctly
-- Character limit in input line
++ Replit part-screen doesn't render correctly
++ Character limit in input line
 - Makeroom name parity
 - Restrict room creation
