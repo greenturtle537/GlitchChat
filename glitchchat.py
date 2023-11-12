@@ -75,7 +75,7 @@ def chat(author, message, flag=0):
     obj = {
         "timestamp": time2string(get_time()),
         "author": author,
-        "message": message
+        "message": message,
         "flag": flag
     }
   else:
