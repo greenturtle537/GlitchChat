@@ -8,6 +8,6 @@
 + Replit part-screen doesn't render correctly [RESOLVED]
 + Mobile screen rotation cuts off right half display [RESOLVED]
 - Program crashes when width is less than the length of the title(19 characters), likely center_text()
-+ Character limit in input line
++ Character limit in input line[RESOLVED]
 - Makeroom name parity
 - Restrict room creation

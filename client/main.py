@@ -94,17 +94,18 @@ def write(author, timestamp, messages):
 def refresh(y=0):
   #while len(buffer) > curses.LINES - 6:
   #  buffer.pop(0)
-  if len(buffer) - curses.LINES + 6 > 0:
-    tempbuffer = buffer[len(buffer) - curses.LINES + 6 - yoff::]
+  if len(buffer) - curses.LINES + reservedlines > 0:
+    tempbuffer = buffer[len(buffer) - curses.LINES + reservedlines - yoff::]
   else:
     tempbuffer = buffer
-  for i in range(curses.LINES - 6):
+  for i in range(curses.LINES - reservedlines):
     if len(tempbuffer) > i:
-      stdscr.addstr(i + 3, 0, tempbuffer[i].ljust(curses.COLS))
+      stdscr.addstr(i + headerlen, 0, tempbuffer[i].ljust(curses.COLS))
     else:
-      stdscr.addstr(i + 3, 0, "".ljust(curses.COLS))
-  stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
-  center_text("", curses.LINES - 3, "▓")
+      stdscr.addstr(i + headerlen, 0, "".ljust(curses.COLS))
+  stdscr.addstr(curses.LINES - ioff, 5, "")  #cursor correction
+  center_text("", curses.LINES - boff, "▓")
+  stdscr.addstr(curses.LINES - ioff, 0, "[$]: ")
   stdscr.refresh()
 
 
@@ -123,8 +124,7 @@ def help(*args):
   helplist = [
       "/h, /help ~ Display this text",
       "/c, /connect <username> ~ Connect to server",
-      "/j, /join <room> ~ Join a room", 
-      "/u, /users ~ Display online users",
+      "/j, /join <room> ~ Join a room", "/u, /users ~ Display online users",
       "/r, /rooms ~ Display room info"
   ]
   return helplist
@@ -265,14 +265,24 @@ activitychart = {0: "Logged in"}
 
 yoff = 0
 
+ioff = 1
+boff = 2
+headerlen = 3
+reservedlines = headerlen + boff
+
+
+def update_reservedlines():
+  global reservedlines
+  reservedlines = headerlen + boff
+
 
 def main_display():
   stdscr.clear()
   center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
   center_text("[ GlitchChat v0.2 ]", 1, "▓", curses.A_STANDOUT)
   center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
-  center_text("", curses.LINES - 3, "▓")
-  stdscr.addstr(curses.LINES - 2, 0, "[$]: ")
+  center_text("", curses.LINES - boff, "▓")
+  stdscr.addstr(curses.LINES - ioff, 0, "[$]: ")
 
 
 stdscr.refresh()
@@ -294,11 +304,11 @@ while True:
     break  # Exit the while loop
   elif c == curses.KEY_BACKSPACE or c == 127:  #Backspace is encoded as 127/DEL on some devices
     command = command[0:len(command) - 1]
-    stdscr.addstr(curses.LINES - 2, 5, command + " ")
-    stdscr.addstr(curses.LINES - 2, 5,
+    stdscr.addstr(curses.LINES - ioff, 5, command + " ")
+    stdscr.addstr(curses.LINES - ioff, 5,
                   command)  #Wastefully corrects cursor position
   elif c == curses.KEY_UP:
-    if yoff < len(buffer) - curses.LINES + 6:
+    if yoff < len(buffer) - curses.LINES + reservedlines:
       yoff = yoff + 1
       refresh()
   elif c == curses.KEY_DOWN:
@@ -307,8 +317,10 @@ while True:
       refresh()
   elif (c == curses.KEY_ENTER or c == 13 or c
         == 10) and len(command) > 0:  # Accept carriage return and line feed
-    stdscr.addstr(curses.LINES - 2, 5, " " * len(command))
-    stdscr.addstr(curses.LINES - 2, 5, "")  #cursor correction
+    stdscr.addstr(curses.LINES - ioff, 5, " " * len(command))
+    stdscr.addstr(curses.LINES - ioff, 5, "")  #cursor correction
+    ioff = 1
+    boff = 2
 
     if command[0] == "/":
       commandls = command.split("/")
@@ -324,7 +336,13 @@ while True:
     command = ""
   elif c > 31 and c <= 126:
     command = command + chr(c)
-    stdscr.addstr(curses.LINES - 2, 5, command)
+    if len(command) + 5 >= curses.COLS * ioff:
+      ioff += 1
+      boff += 1
+      update_reservedlines()
+      main_display()
+      refresh()
+    stdscr.addstr(curses.LINES - ioff, 5, command)
   # ----- Repeated routine handlers -----
   if time.time() - start > 1 and localusername != "local":
     keepalive(localusername)
