@@ -70,12 +70,20 @@ def string2time(string):
   return datetime.strptime(string, timestd)
 
 
-def chat(author, message):
-  obj = {
-      "timestamp": time2string(get_time()),
-      "author": author,
-      "message": message
-  }
+def chat(author, message, flag=0):
+  if flag > 0:
+    obj = {
+        "timestamp": time2string(get_time()),
+        "author": author,
+        "message": message
+        "flag": flag
+    }
+  else:
+    obj = {
+        "timestamp": time2string(get_time()),
+        "author": author,
+        "message": message
+    }
   return obj
 
 
@@ -193,12 +201,17 @@ class ChessServer(BaseHTTPRequestHandler):
       # Result 0 indicates "User/Room not found"
       # Result 1 indicates success
       username = de(query_components["username"])
+      if len(username) > 256:
+        username = username[0:256]
       message = de(query_components["message"])
+      flag = 0
+      if "flag" in query_components:
+        flag = int(de(query_components["flag"]))
       userjson = jload("users.json")
       if username in userjson and not isinstance(
           userjson[username]["activity"], numbers.Number):
         activeroom = jload("rooms/%s.json" % userjson[username]["activity"])
-        chatitem = chat(username, message)
+        chatitem = chat(username, message, flag)
         activeroom.append(chatitem)
         jwrite("rooms/%s.json" % userjson[username]["activity"], activeroom)
         self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
