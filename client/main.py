@@ -279,6 +279,8 @@ cl_write("Welcome to GlitchChat, type /help to begin")
 while True:
   # ----- Key Input handlers -----
   c = stdscr.getch()
+  if c == curses.KEY_RESIZE:
+    break #Todo resize handler 
   #ping(counter, count)
   if c == 27:  # Codes to escape(esc)
     break  # Exit the while loop

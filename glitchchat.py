@@ -236,7 +236,7 @@ class ChessServer(BaseHTTPRequestHandler):
         userjson[username]["keepalive"] = time2string(get_time())
         if not isinstance(userjson[username]["activity"], numbers.Number):
           activeroom = jload("rooms/%s.json" % userjson[username]["activity"])
-          for i in activeroom:
+          for i in activeroom:  #Quicker to parse in reverse and add a break
             dif = string2time(i["timestamp"]) - lastvisit
             if dif.total_seconds() > 0:
               newmsgs.append(i)
