@@ -29,3 +29,5 @@ It is a TUI interface for communicating and testing the capabilities of the serv
 Feel free to submit quality of life features as I will not be prioritizing its development going forward. 
 Third party packages must be compatible with early versions of Python3, and are therefore also not recommended.
 We do plan on releasing dedicated executables for Windows later on, so try to keep it compatible.
+
+**Need more docs? Check the Wiki tab!!!**
