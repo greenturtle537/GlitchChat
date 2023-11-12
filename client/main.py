@@ -74,10 +74,16 @@ def string2time(string):
 
 def cl_write(messages):
   write("CLIENT", clean_time(time2string(get_time())), messages)
+  clear()
+  main_display()
+  refresh()
 
 
 def lc_write(messages):
   write(localusername, clean_time(time2string(get_time())), messages)
+  clear()
+  main_display()
+  refresh()
 
 
 def write(author, timestamp, messages):
@@ -85,13 +91,20 @@ def write(author, timestamp, messages):
     messages = [messages]
   for message in messages:
     #buffer.append(str(message)[:curses.COLS - 1:])
-    buffer.append(
-        "[%s]<%s> %s" %
-        (timestamp, author, str(message)))  #Force sanitize all output
-  refresh(yoff)
+    firstlinewidth = curses.COLS - len("[%s]<%s> " % (timestamp, author))
+    if len(message) > firstlinewidth:
+      buffer.append("[%s]<%s> %s" %
+                    (timestamp, author, str(message)[0:firstlinewidth:]))
+      buffer.append(str(message)[firstlinewidth::])
+      #while
+      print("no")
+    else:
+      buffer.append(
+          "[%s]<%s> %s" %
+          (timestamp, author, str(message)))  #Force sanitize all output
 
 
-def refresh(y=0):
+def refresh():
   #while len(buffer) > curses.LINES - 6:
   #  buffer.pop(0)
   if len(buffer) - curses.LINES + reservedlines > 0:
@@ -106,7 +119,6 @@ def refresh(y=0):
   stdscr.addstr(curses.LINES - ioff, 5, "")  #cursor correction
   center_text("", curses.LINES - boff, "▓")
   stdscr.addstr(curses.LINES - ioff, 0, "[$]: ")
-  stdscr.refresh()
 
 
 def trycommand(commandtext):
@@ -231,6 +243,9 @@ def keepalive(userid):
   #{'timestamp': '09:10:23:00:12:02:049792', 'author': 'a', 'message': 'ok'}
   for i in result:
     write(i["author"], clean_time(ltime(i["timestamp"])), i["message"])
+  clear()
+  main_display()
+  refresh()
   return result
 
 
@@ -275,14 +290,16 @@ def update_reservedlines():
   global reservedlines
   reservedlines = headerlen + boff
 
+def clear():
+  stdscr.clear()
+
+def clearall():
+  stdscr.clear()
 
 def main_display():
-  stdscr.clear()
   center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
   center_text("[ GlitchChat v0.2 ]", 1, "▓", curses.A_STANDOUT)
   center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
-  center_text("", curses.LINES - boff, "▓")
-  stdscr.addstr(curses.LINES - ioff, 0, "[$]: ")
 
 
 stdscr.refresh()
@@ -296,9 +313,9 @@ while True:
   c = stdscr.getch()
   if c == curses.KEY_RESIZE:
     curses.update_lines_cols()
+    clear()
     main_display()
     refresh()
-    stdscr.refresh()
   #ping(counter, count)
   if c == 27:  # Codes to escape(esc)
     break  # Exit the while loop
@@ -321,7 +338,7 @@ while True:
     stdscr.addstr(curses.LINES - ioff, 5, "")  #cursor correction
     ioff = 1
     boff = 2
-
+    update_reservedlines()
     if command[0] == "/":
       commandls = command.split("/")
       commandls = commandls[1].split(" ")
@@ -332,6 +349,8 @@ while True:
       message(command)
     else:
       lc_write(command)
+      
+    
 
     command = ""
   elif c > 31 and c <= 126:
@@ -340,6 +359,7 @@ while True:
       ioff += 1
       boff += 1
       update_reservedlines()
+      clear()
       main_display()
       refresh()
     stdscr.addstr(curses.LINES - ioff, 5, command)
