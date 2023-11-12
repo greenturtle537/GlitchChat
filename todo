@@ -5,8 +5,9 @@
 - Account creation
 + Add bio to rooms [Needs client implementation]
 - Add user joined message
-+ Replit part-screen doesn't render correctly
-+ Mobile screen rotation cuts off right half display 
++ Replit part-screen doesn't render correctly [RESOLVED]
++ Mobile screen rotation cuts off right half display [RESOLVED]
+- Program crashes when width is less than the length of the title(19 characters), likely center_text()
 + Character limit in input line
 - Makeroom name parity
 - Restrict room creation

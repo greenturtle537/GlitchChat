@@ -265,23 +265,30 @@ activitychart = {0: "Logged in"}
 
 yoff = 0
 
-center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
-center_text("[ GlitchChat v0.2 ]", 1, "▓", curses.A_STANDOUT)
-center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
 
-center_text("", curses.LINES - 3, "▓")
-stdscr.addstr(curses.LINES - 2, 0, "[$]: ")
+def main_display():
+  stdscr.clear()
+  center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
+  center_text("[ GlitchChat v0.2 ]", 1, "▓", curses.A_STANDOUT)
+  center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
+  center_text("", curses.LINES - 3, "▓")
+  stdscr.addstr(curses.LINES - 2, 0, "[$]: ")
+
 
 stdscr.refresh()
 command = ""
 start = time.time()
 flag = 0
+main_display()
 cl_write("Welcome to GlitchChat, type /help to begin")
 while True:
   # ----- Key Input handlers -----
   c = stdscr.getch()
   if c == curses.KEY_RESIZE:
-    break #Todo resize handler 
+    curses.update_lines_cols()
+    main_display()
+    refresh()
+    stdscr.refresh()
   #ping(counter, count)
   if c == 27:  # Codes to escape(esc)
     break  # Exit the while loop
