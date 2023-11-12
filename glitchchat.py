@@ -146,6 +146,8 @@ class ChessServer(BaseHTTPRequestHandler):
 
       #username = de(query_components["username"])
       username = de(query_components["username"])
+      if len(username) > 32:
+        username = username[0:32]
       userjson = jload("users.json")
       reserved = ["LOCAL", "CLIENT"]
       res = {"result": 0}
@@ -201,9 +203,9 @@ class ChessServer(BaseHTTPRequestHandler):
       # Result 0 indicates "User/Room not found"
       # Result 1 indicates success
       username = de(query_components["username"])
-      if len(username) > 256:
-        username = username[0:256]
       message = de(query_components["message"])
+      if len(message) > 256:
+        message = message[0:256]
       flag = 0
       if "flag" in query_components:
         flag = int(de(query_components["flag"]))
