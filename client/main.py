@@ -298,7 +298,7 @@ def clearall():
 
 def main_display():
   center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
-  center_text("[ GlitchChat v0.2 ]", 1, "▓", curses.A_STANDOUT)
+  center_text("[ GlitchChat v0.3 ]", 1, "▓", curses.A_STANDOUT)
   center_text("▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔", 2, "▓", curses.A_REVERSE)
 
 
