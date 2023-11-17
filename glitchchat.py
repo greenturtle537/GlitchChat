@@ -228,19 +228,24 @@ class ChessServer(BaseHTTPRequestHandler):
       room = de(query_components["room"])
       userjson = jload("users.json")
       roomsjson = jload("rooms.json")
+      res = {"result": 1, "refresh": False}
       if username in userjson and room in roomsjson:
         userjson[username]["activity"] = room
         jwrite("users.json", userjson)
+        res["result"] = 1
         if roomsjson[room]["refresh"]:
           activeroom = jload("rooms/%s.json" % room)
-          #self.wfile.write(bytes(json.dumps(activeroom), "utf-8"))
-          #Should return roomfile for processing, but client does not support it yet
-          self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
+          res["refresh"] = True
+          newmsgs = []
+          for i in range(roomsjson[room]["refreshlen"]):
+            newmsgs.append(activeroom[len(activeroom) - 1 - i])
+          res["msg"] = newmsgs
+          self.wfile.write(bytes(json.dumps(res), "utf-8"))
 
         else:
-          self.wfile.write(bytes(json.dumps({"result": 1}), "utf-8"))
+          self.wfile.write(bytes(json.dumps(res), "utf-8"))
       else:
-        self.wfile.write(bytes(json.dumps({"result": 0}), "utf-8"))
+        self.wfile.write(bytes(json.dumps(res), "utf-8"))
 
     if p == "/keepalive":
       username = de(query_components["username"])

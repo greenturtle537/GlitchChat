@@ -290,11 +290,14 @@ def update_reservedlines():
   global reservedlines
   reservedlines = headerlen + boff
 
+
 def clear():
   stdscr.clear()
 
+
 def clearall():
   stdscr.clear()
+
 
 def main_display():
   center_text("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁", 0, "▓", curses.A_REVERSE)
@@ -308,6 +311,7 @@ start = time.time()
 flag = 0
 main_display()
 cl_write("Welcome to GlitchChat, type /help to begin")
+wipe = True
 while True:
   # ----- Key Input handlers -----
   c = stdscr.getch()
@@ -349,8 +353,6 @@ while True:
       message(command)
     else:
       lc_write(command)
-      
-    
 
     command = ""
   elif c > 31 and c <= 126:
