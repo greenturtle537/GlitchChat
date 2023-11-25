@@ -140,6 +140,9 @@ class ChessServer(BaseHTTPRequestHandler):
     self.send_header("Content-type", "text/json")
     self.end_headers()
 
+    if p == "/hello":
+      self.wfile.write(bytes("Congrations, you done it!", "utf-8"))
+
     if p == "/connect":
       # Result 0: Username already-in-use/reserved
       # Result 1: Connected
